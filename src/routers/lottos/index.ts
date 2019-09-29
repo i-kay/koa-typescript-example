@@ -6,7 +6,7 @@ import get from './get';
 const router = new Router();
 
 // 현재 작업 중인 router의 path.
-const path = '/hello-world';
+const path = '/lottos';
 
 router.use(get.routes());
 
