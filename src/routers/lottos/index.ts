@@ -2,6 +2,7 @@ import * as Router from 'koa-router';
 
 // import 할 때 method 이름으로 변경
 import get from './get';
+import post from './post';
 
 const router = new Router();
 
@@ -9,5 +10,6 @@ const router = new Router();
 const path = '/lottos';
 
 router.use(get.routes());
+router.use(post.routes());
 
 export default { router, path };
