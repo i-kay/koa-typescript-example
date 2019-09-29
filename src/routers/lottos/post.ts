@@ -6,7 +6,6 @@ const router = new Router();
 router.post('/', async ctx => {
     const { drawNo, numbers, bonus } = ctx.request.body;
     const _id = createLotto(Number(drawNo), numbers, bonus);
-    console.log('_id', _id);
     if (_id) {
         ctx.response.status = 201;
         ctx.body = {

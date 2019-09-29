@@ -1,7 +1,12 @@
 import * as lottos from '../../../data/lottos.json';
 import { Lotto } from '../../models';
 
-const lottosDuringRuntime = [...lottos];
+let lottosDuringRuntime = [...lottos];
+
+export const deleteLotto = (_id: number) => {
+    const deleted = lottosDuringRuntime.filter(lotto => lotto._id !== _id);
+    lottosDuringRuntime = [...deleted];
+};
 
 export const createLotto = (
     drawNo: number,
