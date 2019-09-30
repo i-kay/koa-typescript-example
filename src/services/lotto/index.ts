@@ -3,6 +3,28 @@ import { Lotto } from '../../models';
 
 let lottosDuringRuntime = [...lottos];
 
+export const patchLotto = (
+    _id: number,
+    drawNo: number,
+    numbers: string[],
+    bonus: string,
+) => {
+    for (let lotto of lottosDuringRuntime) {
+        if (lotto._id === _id) {
+            if (drawNo !== undefined) {
+                lotto.drawNo = drawNo;
+            }
+            if (numbers !== undefined) {
+                lotto.numbers = numbers;
+            }
+            if (bonus !== undefined) {
+                lotto.bonus = bonus;
+            }
+            return;
+        }
+    }
+};
+
 export const deleteLotto = (_id: number) => {
     const deleted = lottosDuringRuntime.filter(lotto => lotto._id !== _id);
     lottosDuringRuntime = [...deleted];
