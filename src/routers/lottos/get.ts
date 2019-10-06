@@ -11,9 +11,11 @@ router.get(
             params: { drawNo: string };
             query: { offset: string; limit: string };
             body: Lotto[];
+            state: any; // jwt payload로 수정해야 함
         },
         next: () => void,
     ) => {
+        console.log(ctx.state); // 필요시 jwt payload handling
         const { drawNo } = ctx.params;
         const { offset, limit } = ctx.query;
         let _drawNo = [];
