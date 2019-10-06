@@ -4,3 +4,10 @@ export interface Lotto {
     numbers: string[];
     bonus: string;
 }
+
+export interface User {
+    _id: number;
+    userId: string;
+    passWd: string;
+    authority: string;
+}
