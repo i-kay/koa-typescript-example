@@ -5,7 +5,6 @@ import { findUserById } from '../../services/user';
 const router = new Router();
 
 export default router.post('/', async ctx => {
-    const token = jwt.sign({ foo: 'bar' }, 'privateKey');
     const { userId, passWd } = ctx.request.body;
     const user = findUserById(userId);
     if (!user) {
@@ -24,6 +23,7 @@ export default router.post('/', async ctx => {
             };
         } else {
             ctx.response.status = 201;
+            const token = jwt.sign({ authority: user.authority }, 'privateKey');
             ctx.body = {
                 success: true,
                 msg: token,
