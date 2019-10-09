@@ -1,7 +1,7 @@
 import * as lottos from '../../../data/lottos.json';
 import { Lotto } from '../../models';
 
-let lottosDuringRuntime = [...lottos];
+let lottosFromData = [...lottos];
 
 export const patchLotto = (
     _id: number,
@@ -9,7 +9,7 @@ export const patchLotto = (
     numbers: string[],
     bonus: string,
 ) => {
-    for (let lotto of lottosDuringRuntime) {
+    for (let lotto of lottosFromData) {
         if (lotto._id === _id) {
             if (drawNo !== undefined) {
                 lotto.drawNo = drawNo;
@@ -20,14 +20,21 @@ export const patchLotto = (
             if (bonus !== undefined) {
                 lotto.bonus = bonus;
             }
-            return;
+            return true;
         }
     }
+    return false;
 };
 
 export const deleteLotto = (_id: number) => {
-    const deleted = lottosDuringRuntime.filter(lotto => lotto._id !== _id);
-    lottosDuringRuntime = [...deleted];
+    const deletedResult = lottosFromData.filter(lotto => lotto._id !== _id);
+    const lengthBeforeDeletion = lottosFromData.length;
+    lottosFromData = [...deletedResult];
+    if (deletedResult.length === lengthBeforeDeletion) {
+        return false;
+    } else {
+        return true;
+    }
 };
 
 export const createLotto = (
@@ -36,7 +43,7 @@ export const createLotto = (
     bonus: string,
 ) => {
     const isDuplicatedDrawNo = () => {
-        return lottosDuringRuntime.some(lotto => lotto.drawNo === drawNo);
+        return lottosFromData.some(lotto => lotto.drawNo === drawNo);
     };
     if (isDuplicatedDrawNo()) {
         return null;
@@ -44,19 +51,15 @@ export const createLotto = (
 
     const createdId = (() => {
         let _id = Math.floor(Math.random() * 100000000);
-        let sameIdLottos = lottosDuringRuntime.filter(
-            lotto => lotto._id === _id,
-        );
+        let sameIdLottos = lottosFromData.filter(lotto => lotto._id === _id);
         while (sameIdLottos.length > 0) {
             _id--;
-            sameIdLottos = lottosDuringRuntime.filter(
-                lotto => lotto._id === _id,
-            );
+            sameIdLottos = lottosFromData.filter(lotto => lotto._id === _id);
         }
         return _id;
     })();
 
-    lottosDuringRuntime.unshift({
+    lottosFromData.unshift({
         _id: createdId,
         drawNo,
         numbers,
@@ -65,20 +68,6 @@ export const createLotto = (
     return createdId;
 };
 
-export const findLottosByDrawNo = (
-    drawNo: number[],
-    offset: number,
-    limit: number,
-): Lotto[] => {
-    let _lottos: Lotto[] = lottosDuringRuntime;
-    let _limit: number = limit;
-    if (drawNo.length > 0) {
-        _lottos = lottos.filter(lotto => drawNo.includes(lotto.drawNo));
-    }
-    if (limit === 0) {
-        _limit = _lottos.length;
-    }
-    _lottos = _lottos.slice(offset, offset + _limit);
-
-    return _lottos;
+export const findLottosByDrawNo = (drawNoList: number[]): Lotto[] => {
+    return lottosFromData.filter(lotto => drawNoList.includes(lotto.drawNo));
 };

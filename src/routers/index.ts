@@ -1,14 +1,14 @@
-import * as Router from 'koa-router';
-import * as jwt from 'koa-jwt';
+import * as koaJoirouter from 'koa-joi-router';
+import * as koaJwt from 'koa-jwt';
 
-// resource 하나의 routes. method에 대한 관심은 여기서 두지 않게 한다.
-import helloWorld from './lottos';
 import auth from './auth';
+import lottos from './lottos';
 
-const router = new Router();
+const router = koaJoirouter();
 
-router.use(auth.path, auth.router.routes());
-router.use(jwt({ secret: 'privateKey' }));
-router.use(helloWorld.path, helloWorld.router.routes());
+// router가 route되는 로직과 각 method의 관심을 분리한다.
+router.use(auth.middleware());
+router.use(koaJwt({ secret: 'privateKey' }));
+router.use(lottos.middleware());
 
 export default router;

@@ -1,10 +1,10 @@
-import * as Router from 'koa-router';
+import * as router from 'koa-joi-router';
+
 import post from './post';
 
-const router = new Router();
+const auth = router();
 
-const path = '/auth';
+auth.prefix('/auth');
+auth.route([post]);
 
-router.use(post.routes());
-
-export default { router, path };
+export default auth;

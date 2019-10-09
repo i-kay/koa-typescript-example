@@ -1,43 +1,26 @@
-import * as Router from 'koa-router';
+import { Spec, Joi } from 'koa-joi-router';
 import { Lotto } from '../../models';
 import { findLottosByDrawNo } from '../../services';
+import { LottoJoi } from '../../models/Joi';
 
-const router = new Router();
-
-router.get(
-    ['/', '/:drawNo'],
-    async (
-        ctx: {
-            params: { drawNo: string };
-            query: { offset: string; limit: string };
-            body: Lotto[];
-            state: any; // jwt payload로 수정해야 함
+const router: Spec = {
+    method: 'get',
+    path: '/:drawNoList',
+    validate: {
+        params: {
+            drawNoList: Joi.array()
+                .items(LottoJoi.drawNo)
+                .required(),
         },
-        next: () => void,
-    ) => {
-        console.log(ctx.state); // 필요시 jwt payload handling
-        const { drawNo } = ctx.params;
-        const { offset, limit } = ctx.query;
-        let _drawNo = [];
-        let _offset: number;
-        let _limit: number;
-        if (drawNo) {
-            _drawNo = drawNo.split(',').map(d => Number(d));
-        }
-        if (offset === undefined) {
-            _offset = 0;
-        } else {
-            _offset = Number(offset);
-        }
-        if (limit === undefined) {
-            _limit = 0;
-        } else {
-            _limit = Number(limit);
-        }
-        const lottos: Lotto[] = findLottosByDrawNo(_drawNo, _offset, _limit);
-        ctx.body = lottos;
-        next();
     },
-);
+    handler: [
+        async ctx => {
+            const { drawNoList } = ctx.params;
+            const lottos: Lotto[] = findLottosByDrawNo(drawNoList);
+            ctx.status = 200;
+            ctx.body = lottos;
+        },
+    ],
+};
 
 export default router;
