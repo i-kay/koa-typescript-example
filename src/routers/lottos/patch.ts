@@ -1,12 +1,13 @@
 import { Spec, Joi } from 'koa-joi-router';
 import { patchLotto } from '../../services/lotto';
+import { LottoJoi } from '../../models/Joi';
 
 const router: Spec = {
     method: 'patch',
     path: '/:_id',
     validate: {
         params: {
-            _id: Joi.number().required(),
+            _id: LottoJoi._id.required(),
         },
         body: {
             drawNo: Joi.number(),

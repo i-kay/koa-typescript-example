@@ -1,17 +1,15 @@
 import { Spec, Joi } from 'koa-joi-router';
 import { createLotto } from '../../services/lotto';
+import { LottoJoi } from '../../models/Joi';
 
 const router: Spec = {
     method: 'post',
     path: '/',
     validate: {
         body: {
-            drawNo: Joi.number().required(),
-            numbers: Joi.array()
-                .items(Joi.string())
-                .length(6)
-                .required(),
-            bonus: Joi.string().required(),
+            drawNo: LottoJoi.drawNo.required(),
+            numbers: LottoJoi.numbers.required(),
+            bonus: LottoJoi.bonus.required(),
         },
         type: 'json',
         output: {

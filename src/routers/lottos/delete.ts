@@ -1,12 +1,13 @@
-import { Spec, Joi } from 'koa-joi-router';
+import { Spec } from 'koa-joi-router';
 import { deleteLotto } from '../../services/lotto';
+import { LottoJoi } from '../../models/Joi';
 
 const router: Spec = {
     method: 'delete',
     path: '/:_id',
     validate: {
         params: {
-            _id: Joi.number(),
+            _id: LottoJoi._id.required(),
         },
         output: {
             '200': { body: {} },

@@ -1,6 +1,7 @@
 import { Spec, Joi } from 'koa-joi-router';
 import { Lotto } from '../../models';
 import { findLottosByDrawNo } from '../../services';
+import { LottoJoi } from '../../models/Joi';
 
 const router: Spec = {
     method: 'get',
@@ -8,7 +9,7 @@ const router: Spec = {
     validate: {
         params: {
             drawNoList: Joi.array()
-                .items(Joi.number())
+                .items(LottoJoi.drawNo)
                 .required(),
         },
     },
