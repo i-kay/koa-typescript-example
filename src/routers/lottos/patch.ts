@@ -1,20 +1,25 @@
-import * as Router from 'koa-router';
+import { Spec } from 'koa-joi-router';
 import { patchLotto } from '../../services/lotto';
 
-const router = new Router();
+const router: Spec = {
+    method: 'patch',
+    path: '/:_id',
+    handler: async ctx => {
+        const { _id } = ctx.params;
+        console.log('_id', _id);
+        const { drawNo, numbers, bonus } = ctx.request.body;
+        let _drawNo: number;
 
-export default router.patch('/:_id', async ctx => {
-    const { _id } = ctx.params;
-    const { drawNo, numbers, bonus } = ctx.request.body;
-    let _drawNo: number;
+        if (drawNo) {
+            _drawNo = Number(drawNo);
+        }
 
-    if (drawNo) {
-        _drawNo = Number(drawNo);
-    }
+        patchLotto(Number(_id), _drawNo, numbers, bonus);
+        ctx.body = {
+            _id,
+            result: 'OK',
+        };
+    },
+};
 
-    patchLotto(Number(_id), _drawNo, numbers, bonus);
-    ctx.body = {
-        _id,
-        result: 'OK',
-    };
-});
+export default router;

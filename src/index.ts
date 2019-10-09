@@ -6,12 +6,12 @@ import routers from './routers';
 
 const app = new Koa();
 
-// Middlewares
+// middlewares
 app.use(BodyParser());
 app.use(json());
 app.use(logger());
-app.use(routers.routes());
+app.use(routers.middleware());
 
 app.listen(3000, () => {
-    console.log('Koa started');
+    console.log('koa started http://localhost:3000');
 });
