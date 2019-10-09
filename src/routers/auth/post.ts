@@ -1,10 +1,31 @@
-import { Spec } from 'koa-joi-router';
+import { Spec, Joi } from 'koa-joi-router';
 import * as jwt from 'jsonwebtoken';
 import { findUserById } from '../../services/user';
 
 const router: Spec = {
     method: 'post',
     path: '/',
+    validate: {
+        body: {
+            userId: Joi.string().max(50),
+            passWd: Joi.string().max(200),
+        },
+        type: 'json',
+        output: {
+            '200,201': {
+                body: {
+                    success: Joi.boolean(),
+                    jwt: Joi.string(),
+                },
+            },
+            '400-499': {
+                body: {
+                    success: Joi.boolean(),
+                    msg: Joi.string(),
+                },
+            },
+        },
+    },
     handler: async ctx => {
         const { userId, passWd } = ctx.request.body;
         const user = findUserById(userId);
@@ -30,7 +51,7 @@ const router: Spec = {
                 );
                 ctx.body = {
                     success: true,
-                    msg: token,
+                    jwt: token,
                 };
             }
         }
