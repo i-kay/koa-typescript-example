@@ -5,6 +5,13 @@ import { LottoJoi } from '../../models/Joi';
 const router: Spec = {
     method: 'patch',
     path: '/:_id',
+    meta: {
+        swagger: {
+            summary: '로또',
+            description: '',
+            tags: ['lottos'],
+        },
+    },
     validate: {
         params: {
             _id: LottoJoi._id.required(),
