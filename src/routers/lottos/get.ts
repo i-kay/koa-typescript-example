@@ -8,7 +8,7 @@ const router: Spec = {
     path: '/:drawNoList',
     meta: {
         swagger: {
-            summary: '로또',
+            summary: '로또 데이터를 조회한다.',
             description: '',
             tags: ['lottos'],
         },
@@ -17,7 +17,8 @@ const router: Spec = {
         params: {
             drawNoList: Joi.array()
                 .items(LottoJoi.drawNo)
-                .required(),
+                .required()
+                .description('lotto를 조회할 모든 회차 번호 array'),
         },
     },
     handler: [

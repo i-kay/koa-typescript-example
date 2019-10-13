@@ -7,14 +7,14 @@ const router: Spec = {
     path: '/:_id',
     meta: {
         swagger: {
-            summary: '로또',
+            summary: '로또 데이터를 삭제한다.',
             description: '',
             tags: ['lottos'],
         },
     },
     validate: {
         params: {
-            _id: LottoJoi._id.required(),
+            _id: LottoJoi._id.required().description('삭제할 data의 _id'),
         },
         output: {
             '200': { body: {} },
