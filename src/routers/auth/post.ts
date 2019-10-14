@@ -5,6 +5,13 @@ import { findUserById } from '../../services/user';
 const router: Spec = {
     method: 'post',
     path: '/',
+    meta: {
+        swagger: {
+            summary: 'API 인증',
+            description: 'API를 사용하기 위한 jwt를 발급받는 인증',
+            tags: ['auth'],
+        },
+    },
     validate: {
         body: {
             userId: Joi.string().max(50),

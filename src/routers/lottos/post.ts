@@ -5,11 +5,18 @@ import { LottoJoi } from '../../models/Joi';
 const router: Spec = {
     method: 'post',
     path: '/',
+    meta: {
+        swagger: {
+            summary: '로또 데이터를 추가한다',
+            description: '',
+            tags: ['lottos'],
+        },
+    },
     validate: {
         body: {
-            drawNo: LottoJoi.drawNo.required(),
-            numbers: LottoJoi.numbers.required(),
-            bonus: LottoJoi.bonus.required(),
+            drawNo: LottoJoi.drawNo.required().description('로또 회차 번호'),
+            numbers: LottoJoi.numbers.required().description('로또 6개의 번호'),
+            bonus: LottoJoi.bonus.required().description('로또 보너스 번호'),
         },
         type: 'json',
         output: {
