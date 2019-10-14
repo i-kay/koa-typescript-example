@@ -61,7 +61,7 @@ apiDocs.get('/api-docs', async ctx => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>Example API</title>
+      <title>Typescript Koa Example API</title>
     </head>
     <body>
       <redoc spec-url='/api.json' lazy-rendering></redoc>
