@@ -8,8 +8,8 @@ export const patchLotto = (
     drawNo: number,
     numbers: string[],
     bonus: string,
-) => {
-    for (let lotto of lottosFromData) {
+): boolean => {
+    for (const lotto of lottosFromData) {
         if (lotto._id === _id) {
             if (drawNo !== undefined) {
                 lotto.drawNo = drawNo;
@@ -26,7 +26,7 @@ export const patchLotto = (
     return false;
 };
 
-export const deleteLotto = (_id: number) => {
+export const deleteLotto = (_id: number): boolean => {
     const deletedResult = lottosFromData.filter(lotto => lotto._id !== _id);
     const lengthBeforeDeletion = lottosFromData.length;
     lottosFromData = [...deletedResult];
@@ -41,15 +41,15 @@ export const createLotto = (
     drawNo: number,
     numbers: string[],
     bonus: string,
-) => {
-    const isDuplicatedDrawNo = () => {
+): number | null => {
+    const isDuplicatedDrawNo = (): boolean => {
         return lottosFromData.some(lotto => lotto.drawNo === drawNo);
     };
     if (isDuplicatedDrawNo()) {
         return null;
     }
 
-    const createdId = (() => {
+    const createdId = ((): number => {
         let _id = Math.floor(Math.random() * 100000000);
         let sameIdLottos = lottosFromData.filter(lotto => lotto._id === _id);
         while (sameIdLottos.length > 0) {

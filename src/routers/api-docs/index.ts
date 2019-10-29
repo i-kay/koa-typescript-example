@@ -2,6 +2,8 @@
 // 나중에 오픈소스가 나오길 기다리거나 내가 직접 수정하거나 구현해야 할 것 같다.
 
 import * as Router from 'koa-joi-router';
+
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { SwaggerAPI } = require('koa-joi-router-docs');
 
 import auth from '../auth';
