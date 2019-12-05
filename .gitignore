@@ -95,9 +95,10 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-.env.test
+# dotenv environment variables file.
+# 실제 개발시 .env 주석을 없앤다.
+#.env
+#.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -108,7 +109,7 @@ typings/
 # nuxt.js build output
 .nuxt
 
-# react / gatsby 
+# react / gatsby
 public/
 
 # vuepress build output

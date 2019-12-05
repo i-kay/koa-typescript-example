@@ -3,6 +3,7 @@ import * as logger from 'koa-logger';
 import * as json from 'koa-json';
 import * as BodyParser from 'koa-bodyparser';
 import routers from './routers';
+import { nodeEnv, host, port } from './config';
 
 const app = new Koa();
 
@@ -12,6 +13,7 @@ app.use(json());
 app.use(logger());
 app.use(routers.middleware());
 
-app.listen(3000, () => {
-    console.log('koa started http://localhost:3000');
+app.listen(port, () => {
+    console.log(`environment: ${nodeEnv}`);
+    console.log(`koa started http://${host}:${port}`);
 });
