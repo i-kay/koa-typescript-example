@@ -21,14 +21,12 @@ const router: Spec = {
                 .description('lotto를 조회할 모든 회차 번호 array'),
         },
     },
-    handler: [
-        async ctx => {
-            const { drawNoList } = ctx.params;
-            const lottos: Lotto[] = findLottosByDrawNo(drawNoList);
-            ctx.status = 200;
-            ctx.body = lottos;
-        },
-    ],
+    async handler(ctx) {
+        const { drawNoList } = ctx.params;
+        const lottos: Lotto[] = findLottosByDrawNo(drawNoList);
+        ctx.status = 200;
+        ctx.body = lottos;
+    },
 };
 
 export default router;
