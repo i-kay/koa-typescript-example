@@ -1,6 +1,3 @@
-const dotenv = require('dotenv');
-dotenv.config();
-
 export const endPoint = process.env.MY_API_URL;
 export const apiKey = process.env.MY_API_KEY;
 export const port = process.env.MY_PORT;
