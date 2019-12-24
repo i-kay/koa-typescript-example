@@ -1,5 +1,5 @@
-export const endPoint = process.env.MY_API_URL;
-export const apiKey = process.env.MY_API_KEY;
-export const port = process.env.MY_PORT;
-export const nodeEnv = process.env.MY_NODE_ENV;
-export const host = process.env.MY_HOST;
+export const endPoint = process.env.API_URL;
+export const apiKey = process.env.API_KEY;
+export const nodeEnv = process.env.NODE_ENV;
+export const port = process.env.PORT;
+export const host = process.env.HOST;

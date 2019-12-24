@@ -15,5 +15,5 @@ app.use(routers.middleware());
 
 app.listen(port, () => {
     console.log(`environment: ${nodeEnv}`);
-    console.log(`koa started http://${host}:${port}`);
+    console.log(`koa started at port:${port}`);
 });
