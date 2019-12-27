@@ -1,8 +1,14 @@
 [
     {
-        "_id": 0,
-        "userId": "admin",
-        "passWd": "1234abcd",
+        "userId": 0,
+        "nickname": "admin",
+        "passWd": "1234qwer",
         "authority": "superuser"
+    },
+    {
+        "userId": 1,
+        "nickname": "kay",
+        "passWd": "1234qwer",
+        "authority": "normal"
     }
 ]

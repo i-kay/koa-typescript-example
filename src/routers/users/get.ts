@@ -1,29 +1,28 @@
 import { Spec } from 'koa-joi-router';
 
+import { UserService } from '../../applications/user/user.service';
 import { validateUserId } from '../../applications/user/user.validators.joi';
-import { LottoService } from '../../applications/lotto/lotto.service';
 
 const router: Spec = {
     method: 'get',
-    path: '/',
+    path: '/:userId',
     meta: {
         swagger: {
-            summary: 'lotto 구매 정보를 user별로 조회한다.',
+            summary: 'User 정보를 조회한다.',
             description: '',
-            tags: ['lotto'],
+            tags: ['user'],
         },
     },
     validate: {
-        query: {
+        params: {
             userId: validateUserId(),
         },
     },
     handler: async ctx => {
-        const { userId } = ctx.query;
-        const lottosByUserId = new LottoService().getLottosByUserId(userId);
-
+        const { userId } = ctx.params;
+        const user = new UserService().getUserByUserId(userId);
         ctx.status = 200;
-        ctx.body = lottosByUserId;
+        ctx.body = user;
     },
 };
 
