@@ -4,4 +4,8 @@ export const mysql = {
     MYSQL_PASSWORD: process.env.MYSQL_PASSWORD,
 };
 
-Object.entries(mysql).forEach(([key, value]) => {});
+Object.entries(mysql).forEach(([key, value]) => {
+    if (value === undefined) {
+        throw new Error(`env ${key} is undefined!`);
+    }
+});
