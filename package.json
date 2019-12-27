@@ -7,8 +7,7 @@
         "start": "node dist/src/server.js",
         "start:dev": "nodemon --watch src --exec ts-node -r dotenv/config src/server.ts",
         "build": "tsc",
-        "docker-build:dev": "docker build -f Dockerfile.dev -t ikay/koa-typescript-example:dev --build-arg NODE_ENV=development --build-arg PORT=3000 .",
-        "docker-run:dev": "docker run --rm -p 3000:3000 -v $(pwd):/usr/app -it ikay/koa-typescript-example:dev",
+        "docker-compose-up:dev": "docker-compose -f docker-compose.dev.yml up",
         "lint": "eslint 'src/**/*.{js,ts}'"
     },
     "author": "",
