@@ -3,10 +3,10 @@ import * as router from 'koa-joi-router';
 import get from './get';
 import post from './post';
 
-const lotto = router();
+const user = router();
 
-lotto.prefix('/lottos');
+user.prefix('/users');
 
-lotto.route([get, post]);
+user.route([get, post]);
 
-export default lotto;
+export default user;

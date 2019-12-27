@@ -2,8 +2,8 @@ import { Spec } from 'koa-joi-router';
 
 import { UserService } from '../../applications/user/user.service';
 import {
-    validatePassword,
     validateNickname,
+    validatePassword,
 } from '../../applications/user/user.validators.joi';
 
 const router: Spec = {
@@ -11,9 +11,9 @@ const router: Spec = {
     path: '/',
     meta: {
         swagger: {
-            summary: 'API 인증',
-            description: 'API를 사용하기 위한 jwt를 발급',
-            tags: ['auth'],
+            summary: 'User를 입력한다',
+            description: '',
+            tags: ['user'],
         },
     },
     validate: {
@@ -23,15 +23,16 @@ const router: Spec = {
         },
         type: 'json',
     },
-    handler: async ctx => {
-        const { nickname, password } = ctx.request.body;
-
-        const authToken = new UserService().issueAuthToken(nickname, password);
-        ctx.response.status = 201;
-        ctx.response.body = {
-            authToken,
-        };
-    },
+    handler: [
+        async ctx => {
+            const { nickname, password } = ctx.request.body;
+            const authToken = new UserService().createUser(nickname, password);
+            ctx.response.status = 201;
+            ctx.response.body = {
+                authToken,
+            };
+        },
+    ],
 };
 
 export default router;

@@ -14,6 +14,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "@hapi/boom": "^8.0.1",
         "jsonwebtoken": "^8.5.1",
         "koa": "^2.8.1",
         "koa-bodyparser": "^4.2.1",
