@@ -7,8 +7,8 @@
         "start": "node dist/src/server.js",
         "start:dev": "pm2 start --restart-delay=5000 --watch --ignore-watch=\"node_modules\" --ignore-watch=\"mysql\" --no-daemon ts-node -- -r dotenv/config src/server.ts",
         "build": "tsc",
-        "instances-up:dev": "docker-compose -f docker-compose.dev.yml up",
-        "instances-down:dev": "docker-compose -f docker-compose.dev.yml down",
+        "up:dev": "docker-compose -f docker-compose.dev.yml up",
+        "down:dev": "docker-compose -f docker-compose.dev.yml down",
         "lint": "eslint 'src/**/*.{js,ts}'"
     },
     "author": "",
