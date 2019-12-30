@@ -144,12 +144,13 @@ DROP TABLE IF EXISTS `User`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `User` (
   `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL DEFAULT '',
+  `email` varchar(100) NOT NULL DEFAULT '',
   `password` varchar(200) NOT NULL DEFAULT '',
   `createdAt` datetime DEFAULT NULL,
   `loginAt` datetime DEFAULT NULL,
   `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -172,4 +173,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-30 17:20:33
+-- Dump completed on 2019-12-31  0:43:14
