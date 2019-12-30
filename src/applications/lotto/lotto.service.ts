@@ -11,10 +11,10 @@ import { GameId, GameState } from '../../domains/game/game.types';
 import { LottoId } from '../../domains/lotto/lotto.types';
 import { GameRepository } from '../../domains/game/game.repository.interface';
 import { LottoRepository } from '../../domains/lotto/lotto.repository.interface';
-import { UserRepository } from '../../domains/user/user.repository.interface';
+import { UserRepository as IUserRepository } from '../../domains/user/user.repository.interface';
 import { MemoryLottoRepository } from '../../infrastructures/lotto/memory.lotto.repository';
 import { MemoryGameRepository } from '../../infrastructures/game/memory.game.repository';
-import { MemoryUserRepository } from '../../infrastructures/user/memory.user.repository';
+import { UserRepository } from '../../infrastructures/user/user.repository';
 
 interface LottoData {
     lottoId: LottoId;
@@ -28,7 +28,7 @@ interface LottoData {
 export class LottoService {
     lottoRepository: LottoRepository = new MemoryLottoRepository();
     gameRepository: GameRepository = new MemoryGameRepository();
-    userRepository: UserRepository = new MemoryUserRepository();
+    userRepository: IUserRepository = new UserRepository();
 
     // pagination 처리해야 함
     getLottosByUserId(
@@ -65,13 +65,13 @@ export class LottoService {
     }
 
     // 구매한 로또에 대해 단일 건을 save 하도록 구현돼 있으나 실제로는 다중 건을 save 할 수 있어야 함
-    createLotto(
+    async createLotto(
         userId: UserId,
         gameId: GameId,
         numbers: number[],
         purchaseDate: Datetime,
     ) {
-        const user: User = this.userRepository.findOneByUserId(userId);
+        const user: User = await this.userRepository.findById(userId);
         if (!user) {
             // 에러 메시지 정의 해야함
             // 등록된 User가 아니면 예외처리

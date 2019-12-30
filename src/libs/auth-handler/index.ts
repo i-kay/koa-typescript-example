@@ -1,9 +1,12 @@
 import * as jwt from 'jsonwebtoken';
 
-import { UserId } from '../../domains/user/user.types';
+import { User } from '../../domains/user/user.model';
+
+// 키를 다른 곳에서 import 해야 함
+const secret = 'mySecret';
 
 export type AuthToken = string;
 
-export const issueToken = (userId: UserId): AuthToken => {
-    return jwt.sign({ userId }, 'privateKey');
+export const issueToken = (user: User): AuthToken => {
+    return jwt.sign({ userId: user.id }, secret);
 };

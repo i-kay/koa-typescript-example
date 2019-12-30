@@ -4,18 +4,10 @@ import * as json from 'koa-json';
 import * as BodyParser from 'koa-bodyparser';
 
 import routers from './routers';
-import dbConn from './libs/mysqlClient';
 import { errorHandler } from './middlewares/error-handler';
 import { server as config } from './config';
 
 const app = new Koa();
-
-dbConn.ping(err => {
-    if (err) {
-        throw console.error('db connection error!', err);
-    }
-    console.log('DB Server responded to ping');
-});
 
 // middlewares
 app.use(errorHandler);

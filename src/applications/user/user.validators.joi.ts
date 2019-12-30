@@ -5,10 +5,10 @@ export const validateUserId = () =>
         .min(0)
         .description('userId');
 
-export const validateNickname = () =>
+export const validateEmail = () =>
     Joi.string()
         .max(50)
-        .description('nickname');
+        .description('email');
 
 export const validatePassword = () =>
     Joi.string()
