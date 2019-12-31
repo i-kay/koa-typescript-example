@@ -2,7 +2,6 @@ import { UserRepository as IUserRepository } from '../../domains/user/user.repos
 import dbClient from '../../libs/mysql-client';
 import { User } from '../../domains/user/user.model';
 import { UserId } from '../../domains/user/user.types';
-import { resolve } from 'bluebird';
 
 export class UserRepository implements IUserRepository {
     async findById(userId: number): Promise<User> {
@@ -12,16 +11,20 @@ export class UserRepository implements IUserRepository {
                 [userId],
                 (error, rows) => {
                     if (error) throw error;
-                    const user = rows[0];
-                    const userModel = new User({
-                        id: user.id,
-                        email: user.email,
-                        password: user.password,
-                        createdAt: user.createdAt,
-                        loginAt: user.loginAt,
-                        deletedAt: user.deletedAt,
-                    });
-                    resolve(userModel);
+                    if (rows.length === 0) {
+                        resolve(null);
+                    } else {
+                        const user = rows[0];
+                        const userModel = new User({
+                            id: user.id,
+                            email: user.email,
+                            password: user.password,
+                            createdAt: user.createdAt,
+                            loginAt: user.loginAt,
+                            deletedAt: user.deletedAt,
+                        });
+                        resolve(userModel);
+                    }
                 },
             );
         });
@@ -34,10 +37,10 @@ export class UserRepository implements IUserRepository {
                 [email],
                 (error, rows) => {
                     if (error) throw error;
-                    const user = rows[0];
                     if (rows.length === 0) {
                         resolve(null);
                     } else {
+                        const user = rows[0];
                         const userModel = new User({
                             id: user.id,
                             email: user.email,
