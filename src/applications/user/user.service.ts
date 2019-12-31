@@ -3,16 +3,14 @@ import { conflict, notFound, forbidden } from '@hapi/boom';
 import { Datetime } from '../../domains/common-types/datetime.type';
 import { User } from '../../domains/user/user.model';
 import { UserId, UserPassword } from '../../domains/user/user.types';
-import { UserRepository as IUserRepository } from '../../domains/user/user.repository.interface';
 import { UserRepository } from '../../infrastructures/user/user.repository';
 
 import { issueToken, AuthToken } from '../../libs/auth-handler';
 import { encode } from '../../libs/crypto-handler';
 import { now } from '../../libs/datetime-handler';
+import { getConn } from '../../libs/mysql-client';
 
 export class UserService {
-    userRepository: IUserRepository = new UserRepository();
-
     async getUserById(
         userId: UserId,
     ): Promise<{
@@ -23,7 +21,9 @@ export class UserService {
         loginAt: Datetime;
         deletedAt: Datetime;
     }> {
-        const user: User = await this.userRepository.findById(userId);
+        const dbConn = await getConn();
+        const user: User = await new UserRepository(dbConn).findById(userId);
+        dbConn.end();
         this.checkUserExists(user);
 
         return {
@@ -48,8 +48,9 @@ export class UserService {
             createdAt: now(),
             loginAt: now(),
         });
-        const id = await this.userRepository.saveOne(user);
-
+        const dbConn = await getConn();
+        const id = await new UserRepository(dbConn).saveOne(user);
+        dbConn.end();
         // id를 얻어와서 새로운 user 객체를 만든다.
         const newUser: User = new User({
             id,
@@ -65,7 +66,9 @@ export class UserService {
         email: string,
         password: UserPassword,
     ): Promise<AuthToken> {
-        const user = await this.userRepository.findByEmail(email);
+        const dbConn = await getConn();
+        const user = await new UserRepository(dbConn).findByEmail(email);
+        dbConn.end();
         this.checkUserExists(user);
         this.checkPasswordCorrect(user, password);
         return issueToken(user);
@@ -86,7 +89,9 @@ export class UserService {
     }
 
     private async checkSavingUserPossible(email: string): Promise<void> {
-        const user = await this.userRepository.findByEmail(email);
+        const dbConn = await getConn();
+        const user = await new UserRepository(dbConn).findByEmail(email);
+        dbConn.end();
         if (user) {
             // 에러 메시지 추가해야 함
             throw conflict();

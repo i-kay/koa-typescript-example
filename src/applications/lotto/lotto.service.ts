@@ -11,10 +11,10 @@ import { GameId, GameState } from '../../domains/game/game.types';
 import { LottoId } from '../../domains/lotto/lotto.types';
 import { GameRepository } from '../../domains/game/game.repository.interface';
 import { LottoRepository } from '../../domains/lotto/lotto.repository.interface';
-import { UserRepository as IUserRepository } from '../../domains/user/user.repository.interface';
 import { MemoryLottoRepository } from '../../infrastructures/lotto/memory.lotto.repository';
 import { MemoryGameRepository } from '../../infrastructures/game/memory.game.repository';
 import { UserRepository } from '../../infrastructures/user/user.repository';
+import { getConn } from '../../libs/mysql-client';
 
 interface LottoData {
     lottoId: LottoId;
@@ -28,7 +28,6 @@ interface LottoData {
 export class LottoService {
     lottoRepository: LottoRepository = new MemoryLottoRepository();
     gameRepository: GameRepository = new MemoryGameRepository();
-    userRepository: IUserRepository = new UserRepository();
 
     // pagination 처리해야 함
     getLottosByUserId(
@@ -71,7 +70,9 @@ export class LottoService {
         numbers: number[],
         purchaseDate: Datetime,
     ) {
-        const user: User = await this.userRepository.findById(userId);
+        const dbConn = await getConn();
+        const user: User = await new UserRepository(dbConn).findById(userId);
+        dbConn.end();
         if (!user) {
             // 에러 메시지 정의 해야함
             // 등록된 User가 아니면 예외처리
