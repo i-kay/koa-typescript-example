@@ -1,5 +1,11 @@
 import { Joi } from 'koa-joi-router';
 
+export const validateGameIdList = () =>
+    Joi.array()
+        .items(Joi.number().min(1))
+        .required()
+        .description('GameId');
+
 export const validateGameId = () =>
     Joi.number()
         .min(1)
@@ -14,4 +20,4 @@ export const validateLottoNumber = () =>
 export const validateLottoNumbers = () =>
     Joi.array()
         .items(validateLottoNumber())
-        .length(6);
+        .length(7);

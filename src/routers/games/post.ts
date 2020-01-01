@@ -21,7 +21,7 @@ const router: Spec = {
     },
     handler: async ctx => {
         const { gameId } = ctx.request.body;
-        new GameService().createGame(gameId);
+        await new GameService().createGame(gameId);
         ctx.response.status = 201;
         ctx.body = {};
     },

@@ -1,6 +1,6 @@
 import { Spec } from 'koa-joi-router';
 
-import { validateGameId } from '../../applications/game/game.validators.joi';
+import { validateGameIdList } from '../../applications/game/game.validators.joi';
 import { GameService } from '../../applications/game/game.service';
 import { Game } from '../../domains/game/game.model';
 
@@ -16,19 +16,21 @@ const router: Spec = {
     },
     validate: {
         params: {
-            gameId: validateGameId(),
+            gameId: validateGameIdList(),
         },
     },
     handler: async ctx => {
         const { gameId } = ctx.params;
-        const game: Game = new GameService().getGameByGameId(gameId);
+        const games: Game[] = await new GameService().getGameByGameId(gameId);
         ctx.status = 200;
-        ctx.body = {
-            gameId: game.getGameId(),
-            gameState: game.getGameState(),
-            numbers: game.getnumbers(),
-            bonus: game.getbonus(),
-        };
+        ctx.body = games.map((game: Game) => {
+            return {
+                id: game.id,
+                state: game.state,
+                numbers: game.numbers,
+                createdAt: game.createdAt,
+            };
+        });
     },
 };
 
