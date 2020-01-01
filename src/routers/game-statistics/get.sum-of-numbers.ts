@@ -4,7 +4,7 @@ import { GameStatisticsService } from '../../applications/game-statistics/game-s
 
 const router: Spec = {
     method: 'get',
-    path: '/',
+    path: '/sum-of-numbers',
     meta: {
         swagger: {
             summary: '당첨된 로또 게임 통계를 조회.',
@@ -14,9 +14,9 @@ const router: Spec = {
     },
     validate: {},
     handler: async ctx => {
-        const average = await new GameStatisticsService().getGameStatistics();
+        const sum = await new GameStatisticsService().getSumOfNumbers();
         ctx.status = 200;
-        ctx.body = average;
+        ctx.body = { sum };
     },
 };
 

@@ -1,6 +1,6 @@
 import * as router from 'koa-joi-router';
 
-import get from './get';
+import get from './get.sum-of-numbers';
 
 const game = router();
 
