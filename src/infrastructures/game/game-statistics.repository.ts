@@ -39,6 +39,45 @@ export class GameStatisticsRepository implements IGameStatisticsRepository {
     }
 
     async calculateFrequencyOfNumbers(): Promise<number[]> {
-        throw new Error('Method not implemented.');
+        const [rows, _] = await this.dbConn.query(
+            ' \
+            SELECT DISTINCT(T.num), SUM(T.cnt) cnt \
+            FROM ( \
+                SELECT number1 num, COUNT(number1) cnt \
+                FROM Game \
+                WHERE number1 IS NOT NULL \
+                Group By number1 \
+                UNION \
+                SELECT number2 num, COUNT(number2) cnt \
+                FROM Game \
+                WHERE number2 IS NOT NULL \
+                Group By number2 \
+                UNION \
+                SELECT number3 num, COUNT(number3) cnt \
+                FROM Game \
+                WHERE number3 IS NOT NULL \
+                Group By number3 \
+                UNION \
+                SELECT number4 num, COUNT(number4) cnt \
+                FROM Game \
+                WHERE number4 IS NOT NULL \
+                Group By number4 \
+                UNION \
+                SELECT number5 num, COUNT(number5) cnt \
+                FROM Game \
+                WHERE number5 IS NOT NULL \
+                Group By number5 \
+                UNION \
+                SELECT number6 num, COUNT(number6) cnt \
+                FROM Game \
+                WHERE number6 IS NOT NULL \
+                Group By number6 \
+            ) T \
+            GROUP BY T.num',
+        );
+        const frequencyOfNumbers = rows.map(row => {
+            return Number(row.cnt);
+        });
+        return frequencyOfNumbers;
     }
 }

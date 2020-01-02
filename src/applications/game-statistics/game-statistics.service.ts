@@ -23,10 +23,12 @@ export class GameStatisticsService {
         return AverageOfevenNumbers;
     }
 
-    async getFrequencyOfNumbers(): Promise<number> {
+    async getFrequencyOfNumbers(): Promise<number[]> {
         const dbConn = await getConn();
-
+        const frequencyOfNumbers = await new GameStatisticsRepository(
+            dbConn,
+        ).calculateFrequencyOfNumbers();
         dbConn.end();
-        return;
+        return frequencyOfNumbers;
     }
 }
