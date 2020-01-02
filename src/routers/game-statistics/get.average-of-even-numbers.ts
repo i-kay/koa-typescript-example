@@ -4,7 +4,7 @@ import { GameStatisticsService } from '../../applications/game-statistics/game-s
 
 const router: Spec = {
     method: 'get',
-    path: '/even-numbers',
+    path: '/average-of-even-numbers',
     meta: {
         swagger: {
             summary: '각 회차에서 짝수의 개수의 평균 조회',

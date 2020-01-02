@@ -1,7 +1,7 @@
 import * as router from 'koa-joi-router';
 
 import getSumofNumbers from './get.sum-of-numbers';
-import getEvenNumbers from './get.even-numbers';
+import getEvenNumbers from './get.average-of-even-numbers';
 
 const game = router();
 
