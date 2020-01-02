@@ -16,11 +16,11 @@ export class GameStatisticsService {
 
     async getAverageOfEvenNumbers(): Promise<number> {
         const dbConn = await getConn();
-        const evenNumbers = await new GameStatisticsRepository(
+        const AverageOfevenNumbers = await new GameStatisticsRepository(
             dbConn,
         ).calculateAverageOfEvenNumbers();
         dbConn.end();
-        return evenNumbers;
+        return AverageOfevenNumbers;
     }
 
     async getFrequencyOfNumbers(): Promise<number> {
