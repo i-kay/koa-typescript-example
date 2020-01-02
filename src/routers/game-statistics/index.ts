@@ -1,11 +1,12 @@
 import * as router from 'koa-joi-router';
 
-import get from './get.sum-of-numbers';
+import getSumofNumbers from './get.sum-of-numbers';
+import getEvenNumbers from './get.even-numbers';
 
 const game = router();
 
 game.prefix('/game-statistics');
 
-game.route([get]);
+game.route([getSumofNumbers, getEvenNumbers]);
 
 export default game;

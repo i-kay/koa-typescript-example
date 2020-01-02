@@ -9,8 +9,24 @@ export class GameStatisticsService {
         const dbConn = await getConn();
         const sum = await new GameStatisticsRepository(
             dbConn,
-        ).getSumOfNumbers();
+        ).calculateSumOfNumbers();
         dbConn.end();
         return sum;
+    }
+
+    async getAverageOfEvenNumbers(): Promise<number> {
+        const dbConn = await getConn();
+        const evenNumbers = await new GameStatisticsRepository(
+            dbConn,
+        ).calculateAverageOfEvenNumbers();
+        dbConn.end();
+        return evenNumbers;
+    }
+
+    async getFrequencyOfNumbers(): Promise<number> {
+        const dbConn = await getConn();
+
+        dbConn.end();
+        return;
     }
 }

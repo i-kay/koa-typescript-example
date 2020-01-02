@@ -1,3 +1,5 @@
 export interface GameStatisticsRepository {
-    getSumOfNumbers(): Promise<number>;
+    calculateSumOfNumbers(): Promise<number>;
+    calculateAverageOfEvenNumbers(): Promise<number>;
+    calculateFrequencyOfNumbers(): Promise<number[]>;
 }
