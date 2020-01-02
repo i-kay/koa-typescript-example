@@ -7,7 +7,7 @@ const router: Spec = {
     path: '/sum-of-numbers',
     meta: {
         swagger: {
-            summary: '로또 게임 회차 합의 평균을 조회',
+            summary: '각 회차 합의 평균을 조회',
             description: '',
             tags: ['game statistics'],
         },
