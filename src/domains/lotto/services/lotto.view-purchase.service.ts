@@ -1,5 +1,4 @@
-import { conflict } from '@hapi/boom';
-import { Connection } from 'mysql2/promise';
+import { internal } from '@hapi/boom';
 
 import { Lotto } from '../lotto.model';
 import { LottoId, StateOfNumber, PurchaseId } from '../lotto.types';
@@ -86,21 +85,25 @@ export class LottoViewPurchaseService {
             } else if (lottoNumber.state === 'BEFORE') {
                 before += 1;
             } else {
-                // 에러
+                // TODO: 에러 메시지 정의해야 함
+                throw internal();
             }
         });
         if (before === 0) {
             if (win + bonus + not !== 6) {
-                // 에러
+                // TODO: 에러 메시지 정의해야 함
+                throw internal();
             }
         } else {
             if (before !== 6) {
-                /// 에러
+                // TODO: 에러 메시지 정의해야 함
+                throw internal();
             }
         }
 
         if (bonus > 1) {
-            // 에러
+            // TODO: 에러 메시지 정의해야 함
+            throw internal();
         }
 
         if (win === 6) {
