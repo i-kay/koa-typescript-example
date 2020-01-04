@@ -8,7 +8,8 @@ const router: Spec = {
     path: '/',
     meta: {
         swagger: {
-            summary: 'lotto 구매 정보를 user별로 조회한다.',
+            summary:
+                '저장된 lotto 구매 내역을 user별로, 같이 구매된 건 단위로 조회한다.',
             description: '',
             tags: ['lotto'],
         },
@@ -20,7 +21,9 @@ const router: Spec = {
     },
     handler: async ctx => {
         const { userId } = ctx.query;
-        const lottosByUserId = new LottoService().getLottosByUserId(userId);
+        const lottosByUserId = await new LottoService().getLottosByUserId(
+            userId,
+        );
 
         ctx.status = 200;
         ctx.body = lottosByUserId;
