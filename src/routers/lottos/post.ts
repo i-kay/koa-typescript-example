@@ -1,12 +1,14 @@
 import { Spec } from 'koa-joi-router';
 
 import { LottoService } from '../../applications/lotto/lotto.service';
-import { Datetime } from '../../applications/common/common.validators.joi';
 import { validateUserId } from '../../applications/user/user.validators.joi';
+import { validateGameId } from '../../applications/game/game.validators.joi';
 import {
-    validateGameId,
+    validatePurchaseId,
     validateLottoNumbers,
-} from '../../applications/game/game.validators.joi';
+} from '../../applications/lotto/lotto.validators.joi';
+
+type LottoNumbers = Array<[Array<number>]>;
 
 const router: Spec = {
     method: 'post',
@@ -20,17 +22,24 @@ const router: Spec = {
     },
     validate: {
         body: {
+            purchaseId: validatePurchaseId(),
             userId: validateUserId(),
             gameId: validateGameId(),
-            numbers: validateLottoNumbers(),
+            LottoNumbers: validateLottoNumbers(),
         },
         type: 'json',
     },
     handler: [
         async ctx => {
-            const { userId, gameId, numbers } = ctx.request.body;
+            const {
+                purchaseId,
+                gameId,
+                userId,
+                LottoNumbers,
+            } = ctx.request.body;
 
-            new LottoService().createLotto(userId, gameId, numbers);
+            // TODO: implements
+            // await new LottoService().createLotto(userId, gameId, numbers);
 
             ctx.status = 201;
             ctx.body = {};
