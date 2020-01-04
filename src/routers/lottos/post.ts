@@ -23,20 +23,14 @@ const router: Spec = {
             userId: validateUserId(),
             gameId: validateGameId(),
             numbers: validateLottoNumbers(),
-            purchaseDate: Datetime(),
         },
         type: 'json',
     },
     handler: [
         async ctx => {
-            const { userId, gameId, numbers, purchaseDate } = ctx.request.body;
+            const { userId, gameId, numbers } = ctx.request.body;
 
-            new LottoService().createLotto(
-                userId,
-                gameId,
-                numbers,
-                purchaseDate,
-            );
+            new LottoService().createLotto(userId, gameId, numbers);
 
             ctx.status = 201;
             ctx.body = {};

@@ -12,7 +12,7 @@ interface Cntr {
     order: number; // 용지 내 순서. 1~5
     winningAmount: number;
     lottoNumbers: LottoNumber[];
-    purchasedAt: Datetime;
+    createdAt: Datetime;
     deletedAt: Datetime;
 }
 
@@ -24,7 +24,7 @@ export class Lotto {
     order: number; // 용지 내 순서. 1~5
     winningAmount: number;
     lottoNumbers: LottoNumber[];
-    purchasedAt: Datetime;
+    createdAt: Datetime;
     deletedAt: Datetime;
 
     constructor(lotto: Cntr) {
@@ -35,7 +35,7 @@ export class Lotto {
         this.order = lotto.order;
         this.winningAmount = lotto.winningAmount;
         this.lottoNumbers = lotto.lottoNumbers;
-        this.purchasedAt = lotto.purchasedAt;
+        this.createdAt = lotto.createdAt;
         this.deletedAt = lotto.deletedAt;
     }
 }

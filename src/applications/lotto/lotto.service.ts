@@ -40,12 +40,7 @@ export class LottoService {
     }
 
     // 구매한 로또에 대해 단일 건을 save 하도록 구현돼 있으나 실제로는 다중 건을 save 할 수 있어야 함
-    async createLotto(
-        userId: UserId,
-        gameId: GameId,
-        numbers: number[],
-        purchaseDate: Datetime,
-    ) {
+    async createLotto(userId: UserId, gameId: GameId, numbers: number[]) {
         const dbConn = await getConn();
         const user: User = await new UserRepository(dbConn).findById(userId);
         dbConn.end();

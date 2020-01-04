@@ -19,7 +19,7 @@ type Lottos = Array<{
 export type PurchasedLottos = Array<{
     purchaseId: PurchaseId;
     gameId: GameId;
-    purchasedAt: Datetime;
+    createdAt: Datetime;
     lottos: Lottos;
 }>;
 
@@ -45,7 +45,7 @@ export class LottoViewPurchaseService {
                 purchasedLottos.push({
                     purchaseId: lotto.purchaseId,
                     gameId: lotto.gameId,
-                    purchasedAt: lotto.purchasedAt,
+                    createdAt: lotto.createdAt,
                     lottos,
                 });
             } else {

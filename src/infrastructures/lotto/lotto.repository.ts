@@ -50,7 +50,7 @@ export class LottoRepository implements ILottoRepository {
                         state: lotto.stateOfNumber6,
                     }),
                 ],
-                purchasedAt: lotto.purchasedAt,
+                createdAt: lotto.createdAt,
                 deletedAt: lotto.deletedAt,
             });
         });
