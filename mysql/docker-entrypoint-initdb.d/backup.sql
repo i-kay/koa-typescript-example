@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS `Game`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Game` (
   `id` bigint(11) unsigned NOT NULL,
-  `state` varchar(11) DEFAULT 'BEFORE',
+  `state` varchar(20) DEFAULT 'BEFORE',
   `number1` tinyint(3) unsigned DEFAULT NULL,
   `number2` tinyint(3) unsigned DEFAULT NULL,
   `number3` tinyint(3) unsigned DEFAULT NULL,
@@ -64,31 +64,32 @@ DROP TABLE IF EXISTS `Lotto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Lotto` (
-  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '각 게임을 구분하는 id',
+  `purchaseId` bigint(11) unsigned DEFAULT NULL COMMENT '구매단위를 구분하는 id',
   `gameId` bigint(11) unsigned DEFAULT NULL,
   `userId` bigint(11) unsigned DEFAULT NULL,
-  `purchaseCnt` tinyint(11) unsigned DEFAULT NULL,
-  `LottoNumber1` bigint(11) unsigned DEFAULT NULL,
-  `LottoNumber2` bigint(11) unsigned DEFAULT NULL,
-  `LottoNumber3` bigint(11) unsigned DEFAULT NULL,
-  `LottoNumber4` bigint(11) unsigned DEFAULT NULL,
-  `LottoNumber5` bigint(11) unsigned DEFAULT NULL,
-  `purchasedAt` datetime DEFAULT NULL,
+  `order` tinyint(3) unsigned DEFAULT NULL COMMENT '용지내 순서. 1~5',
+  `winningAmount` bigint(11) unsigned DEFAULT NULL,
+  `number1` tinyint(11) unsigned DEFAULT NULL,
+  `number2` tinyint(11) unsigned DEFAULT NULL,
+  `number3` tinyint(11) unsigned DEFAULT NULL,
+  `number4` tinyint(11) unsigned DEFAULT NULL,
+  `number5` tinyint(11) unsigned DEFAULT NULL,
+  `number6` tinyint(11) unsigned DEFAULT NULL,
+  `stateOfNumber1` varchar(20) DEFAULT 'BEFORE',
+  `stateOfNumber2` varchar(20) DEFAULT 'BEFORE',
+  `stateOfNumber3` varchar(20) DEFAULT 'BEFORE',
+  `stateOfNumber4` varchar(20) DEFAULT 'BEFORE',
+  `stateOfNumber5` varchar(20) DEFAULT 'BEFORE',
+  `stateOfNumber6` varchar(20) DEFAULT 'BEFORE',
+  `createdAt` datetime DEFAULT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
-  KEY `LottoNumber1` (`LottoNumber1`),
-  KEY `LottoNumber2` (`LottoNumber2`),
-  KEY `LottoNumber3` (`LottoNumber3`),
-  KEY `LottoNumber4` (`LottoNumber4`),
-  KEY `LottoNumber5` (`LottoNumber5`),
+  KEY `gameId` (`gameId`),
   CONSTRAINT `Lotto_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `Lotto_ibfk_2` FOREIGN KEY (`LottoNumber1`) REFERENCES `LottoNumber` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `Lotto_ibfk_3` FOREIGN KEY (`LottoNumber2`) REFERENCES `LottoNumber` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `Lotto_ibfk_4` FOREIGN KEY (`LottoNumber3`) REFERENCES `LottoNumber` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `Lotto_ibfk_5` FOREIGN KEY (`LottoNumber4`) REFERENCES `LottoNumber` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `Lotto_ibfk_6` FOREIGN KEY (`LottoNumber5`) REFERENCES `LottoNumber` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  CONSTRAINT `Lotto_ibfk_2` FOREIGN KEY (`gameId`) REFERENCES `Game` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,43 +98,8 @@ CREATE TABLE `Lotto` (
 
 LOCK TABLES `Lotto` WRITE;
 /*!40000 ALTER TABLE `Lotto` DISABLE KEYS */;
-INSERT INTO `Lotto` VALUES (1,868,1,3,1,2,3,NULL,NULL,'2019-12-28 12:18:37',NULL),(2,867,1,5,4,5,6,7,8,'2019-12-21 00:12:13',NULL);
+INSERT INTO `Lotto` VALUES (1,1614207942,868,1,1,0,11,12,21,22,25,30,'BEFORE','BEFORE','BEFORE','BEFORE','BEFORE','BEFORE','2019-12-21 00:12:13',NULL),(2,1614207942,868,1,2,0,7,11,21,22,25,30,'BEFORE','BEFORE','BEFORE','BEFORE','BEFORE','BEFORE','2019-12-21 00:12:13',NULL),(3,1614207942,868,1,3,0,1,2,3,11,12,21,'BEFORE','BEFORE','BEFORE','BEFORE','BEFORE','BEFORE','2019-12-21 00:12:13',NULL),(4,1614207943,867,1,1,5000,14,17,19,20,21,45,'WIN','WIN','WIN','NOT','NOT','NOT','2019-12-14 00:00:01',NULL),(5,1614207943,867,1,2,0,1,2,3,4,5,6,'NOT','NOT','NOT','NOT','NOT','NOT','2019-12-14 00:00:01',NULL),(6,1614207945,867,1,1,0,7,8,9,10,11,12,'NOT','NOT','NOT','NOT','NOT','NOT','2019-12-15 12:34:56',NULL),(7,1614207945,867,1,2,123123123,14,17,19,22,24,40,'WIN','WIN','WIN','WIN','WIN','WIN','2019-12-15 12:34:56',NULL);
 /*!40000 ALTER TABLE `Lotto` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `LottoNumber`
---
-
-DROP TABLE IF EXISTS `LottoNumber`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `LottoNumber` (
-  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
-  `number1` tinyint(11) unsigned DEFAULT NULL,
-  `number2` tinyint(11) unsigned DEFAULT NULL,
-  `number3` tinyint(11) unsigned DEFAULT NULL,
-  `number4` tinyint(11) unsigned DEFAULT NULL,
-  `number5` tinyint(11) unsigned DEFAULT NULL,
-  `number6` tinyint(11) unsigned DEFAULT NULL,
-  `winningType1` varchar(10) DEFAULT NULL,
-  `winningType2` varchar(10) DEFAULT NULL,
-  `winningType3` varchar(10) DEFAULT NULL,
-  `winningType4` varchar(10) DEFAULT NULL,
-  `winningType5` varchar(10) DEFAULT NULL,
-  `winningType6` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `LottoNumber`
---
-
-LOCK TABLES `LottoNumber` WRITE;
-/*!40000 ALTER TABLE `LottoNumber` DISABLE KEYS */;
-INSERT INTO `LottoNumber` VALUES (1,1,2,3,4,5,6,NULL,NULL,NULL,NULL,NULL,NULL),(2,12,23,31,33,40,45,NULL,NULL,NULL,NULL,NULL,NULL),(3,8,10,11,17,18,34,NULL,NULL,NULL,NULL,NULL,NULL),(4,11,12,13,14,15,16,'WIN','WIN','WIN','NOT','NOT','NOT'),(5,11,12,13,24,25,26,'WIN','WIN','WIN','NOT','NOT','WIN'),(6,11,12,13,17,20,26,'WIN','WIN','WIN','WIN','WIN','WIN'),(7,11,12,13,17,19,26,'WIN','WIN','WIN','WIN','BONUS','WIN'),(8,11,12,13,17,19,44,'WIN','WIN','WIN','WIN','BONUS','NOT');
-/*!40000 ALTER TABLE `LottoNumber` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -174,4 +140,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-02 22:38:02
+-- Dump completed on 2020-01-05  9:53:27
