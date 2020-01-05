@@ -1,20 +1,23 @@
-import { conflict, notFound } from '@hapi/boom';
+import { notFound } from '@hapi/boom';
 
-import { MemoryGameRepository } from '../../infrastructures/game/memory.game.repository';
+import { GameRepository } from '../../infrastructures/game/game.repository';
 import { Game } from '../../domains/game/game.model';
-import { GameRepository } from '../../domains/game/game.repository.interface';
 import { GameId } from '../../domains/game/game.types';
+import { getConn } from '../../libs/mysql-client';
+import { now } from '../../libs/datetime-handler';
+import { GameCreationService } from '../../domains/game/services/game.creation.service';
+import { GameDrawService } from '../../domains/game/services/game.draw.service';
 
 export class GameService {
-    gameRepository: GameRepository = new MemoryGameRepository();
-
-    getGameByGameId(gameId: GameId): Game {
-        const game: Game = this.gameRepository.findOneByGameId(gameId);
-        if (!game) {
+    async getGameByGameId(gameId: GameId[]): Promise<Game[]> {
+        const dbConn = await getConn();
+        const games: Game[] = await new GameRepository(dbConn).findById(gameId);
+        dbConn.end();
+        if (!games) {
             // 에러 메시지 추가해야 함
             throw notFound();
         }
-        return game;
+        return games;
     }
 
     /**
@@ -23,10 +26,12 @@ export class GameService {
      *
      * @param gameId 로또 회차
      */
-    createGame(gameId: GameId): void {
-        const game = new Game({ gameId });
-        this.checkSavingGamePossible(game);
-        this.gameRepository.saveOne(game);
+    async createGame(gameId: GameId): Promise<void> {
+        const dbConn = await getConn();
+        const game = new Game({ id: gameId, createdAt: now() });
+        await new GameCreationService().checkSavingGamePossible(dbConn, gameId);
+        await new GameRepository(dbConn).saveOne(game);
+        dbConn.end();
     }
 
     /**
@@ -34,19 +39,15 @@ export class GameService {
      * 로또 번호를 뽑는다.
      *
      * @param gameId 로또 회차
-     * @param numbers 로또 6자리 번호
-     * @param bonus 로또 보너스 번호
+     * @param numbers 로또 번호. 0~5는 로또, 6번은 보너스 번호
      */
-    pullGame(gameId: GameId, numbers: number[], bonus: number): void {
-        const game: Game = this.gameRepository.findOneByGameId(gameId);
-        game.pull(numbers, bonus);
-        this.gameRepository.saveOne(game);
-    }
-
-    private checkSavingGamePossible(game): void {
-        if (this.gameRepository.findOneByGameId(game.getGameId())) {
-            // 에러 메시지 정의해야 함
-            throw conflict();
-        }
+    async drawGame(gameId: GameId, numbers: number[]): Promise<void> {
+        const dbConn = await getConn();
+        const games = await new GameRepository(dbConn).findById([gameId]);
+        await new GameDrawService().checkdrawingGamePossible(games);
+        const game = games[0];
+        game.draw(numbers);
+        await new GameRepository(dbConn).saveOne(game);
+        dbConn.end();
     }
 }

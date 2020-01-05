@@ -1,10 +1,8 @@
 import { Lotto } from './lotto.model';
-import { LottoId } from './lotto.types';
 import { UserId } from '../user/user.types';
+import { LottoId } from './lotto.types';
 
 export interface LottoRepository {
-    // pagination 구현 필요
-    findAllByUserId(userId: UserId): Lotto[];
-    save(lottos: Lotto[]): void;
-    nextLottoId(): LottoId;
+    findByUserId(userId: UserId): Promise<Lotto[]>;
+    save(Lotto: Lotto[]): Promise<LottoId[]>;
 }

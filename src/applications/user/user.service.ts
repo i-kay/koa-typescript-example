@@ -1,50 +1,77 @@
 import { conflict, notFound, forbidden } from '@hapi/boom';
 
+import { Datetime } from '../../domains/common-types/datetime.type';
 import { User } from '../../domains/user/user.model';
 import { UserId, UserPassword } from '../../domains/user/user.types';
-import { UserRepository } from '../../domains/user/user.repository.interface';
-import { MemoryUserRepository } from '../../infrastructures/user/memory.user.repository';
+import { UserRepository } from '../../infrastructures/user/user.repository';
 
 import { issueToken, AuthToken } from '../../libs/auth-handler';
+import { encode } from '../../libs/crypto-handler';
+import { now } from '../../libs/datetime-handler';
+import { getConn } from '../../libs/mysql-client';
 
 export class UserService {
-    userRepository: UserRepository = new MemoryUserRepository();
-
-    getUserByUserId(
+    async getUserById(
         userId: UserId,
-    ): {
-        userId: UserId;
-        nickname: string;
+    ): Promise<{
+        id: UserId;
+        email: string;
         password: UserPassword;
-    } {
-        const user: User = this.userRepository.findOneByUserId(userId);
+        createdAt: Datetime;
+        loginAt: Datetime;
+        deletedAt: Datetime;
+    }> {
+        const dbConn = await getConn();
+        const user: User = await new UserRepository(dbConn).findById(userId);
+        dbConn.end();
         this.checkUserExists(user);
+
         return {
-            userId: user.getUserId(),
-            nickname: user.getNickname(),
-            password: user.getPassword(),
+            id: user.id,
+            email: user.email,
+            password: user.password,
+            createdAt: user.createdAt,
+            loginAt: user.loginAt,
+            deletedAt: user.deletedAt,
         };
     }
 
-    /**
-     * 유저를 생성한다. 생성후 Token을 반환한다.
-     *
-     * @param nickname 생성할 유저의 nickname
-     * @param password 생성할 유저의 password
-     */
-    createUser(nickname: string, password: UserPassword): AuthToken {
-        this.checkSavingUserPossible(nickname);
-        const userId = this.userRepository.nextUserId();
-        const newUser = new User({ userId, nickname, password });
-        this.userRepository.saveOne(newUser);
-        return issueToken(userId);
+    async createUser(
+        email: string,
+        password: UserPassword,
+    ): Promise<AuthToken> {
+        await this.checkSavingUserPossible(email);
+
+        const user = new User({
+            email,
+            password: encode(password),
+            createdAt: now(),
+            loginAt: now(),
+        });
+        const dbConn = await getConn();
+        const id = await new UserRepository(dbConn).saveOne(user);
+        dbConn.end();
+        // id를 얻어와서 새로운 user 객체를 만든다.
+        const newUser: User = new User({
+            id,
+            email: user.email,
+            password: user.password,
+            createdAt: user.createdAt,
+            loginAt: user.loginAt,
+        });
+        return issueToken(newUser);
     }
 
-    issueAuthToken(nickname: string, password: UserPassword): AuthToken {
-        const user: User = this.userRepository.findOneByNickname(nickname);
+    async issueAuthToken(
+        email: string,
+        password: UserPassword,
+    ): Promise<AuthToken> {
+        const dbConn = await getConn();
+        const user = await new UserRepository(dbConn).findByEmail(email);
+        dbConn.end();
         this.checkUserExists(user);
         this.checkPasswordCorrect(user, password);
-        return issueToken(user.getUserId());
+        return issueToken(user);
     }
 
     private checkPasswordCorrect(user: User, password: UserPassword): void {
@@ -61,8 +88,11 @@ export class UserService {
         }
     }
 
-    private checkSavingUserPossible(nickname: string): void {
-        if (!!this.userRepository.findOneByNickname(nickname)) {
+    private async checkSavingUserPossible(email: string): Promise<void> {
+        const dbConn = await getConn();
+        const user = await new UserRepository(dbConn).findByEmail(email);
+        dbConn.end();
+        if (user) {
             // 에러 메시지 추가해야 함
             throw conflict();
         }

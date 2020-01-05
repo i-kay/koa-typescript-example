@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+    mysql:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: mySecret
+        ports:
+            - 3306:3306
+        volumes:
+            - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+    api-server:
+        image: ikay/koa-typescript-example:dev
+        build: Dockerfile.dev
+        ports:
+            - 3080:3080
+        volumes:
+            - .:/usr/app
+        environment:
+            NODE_ENV: development
+            PORT: 3080
+            MYSQL_HOST: mysql
+            MYSQL_USER: root
+            MYSQL_PASSWORD: mySecret
+            MYSQL_DATABASE: Lotto

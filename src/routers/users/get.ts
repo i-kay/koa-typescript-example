@@ -20,7 +20,7 @@ const router: Spec = {
     },
     handler: async ctx => {
         const { userId } = ctx.params;
-        const user = new UserService().getUserByUserId(userId);
+        const user = await new UserService().getUserById(userId);
         ctx.status = 200;
         ctx.body = user;
     },

@@ -1,38 +1,33 @@
 import { UserId, UserPassword } from './user.types';
-
+import { Datetime } from '../common-types/datetime.type';
+import { encode } from '../../libs/crypto-handler';
 interface Cntr {
-    userId: UserId;
-    nickname: string;
+    id?: UserId;
+    email: string;
     password: UserPassword;
+    createdAt?: Datetime;
+    loginAt?: Datetime;
+    deletedAt?: Datetime;
 }
 
 export class User {
-    private userId: UserId;
-    private nickname: string;
-    private password: UserPassword;
+    readonly id: UserId;
+    readonly email: string;
+    readonly password: UserPassword;
+    readonly createdAt: Datetime;
+    readonly loginAt: Datetime;
+    readonly deletedAt: Datetime;
 
     constructor(user: Cntr) {
-        this.userId = user.userId;
-        this.nickname = user.nickname;
+        this.id = user.id;
+        this.email = user.email;
         this.password = user.password;
+        this.createdAt = user.createdAt;
+        this.loginAt = user.loginAt;
+        this.deletedAt = user.deletedAt;
     }
 
     isPasswordMatched(password: UserPassword): boolean {
-        return this.encodePassword(password) === this.password;
-    }
-
-    private encodePassword(password: UserPassword): string {
-        // hash등의 필요한 작업
-        return password;
-    }
-
-    getUserId(): UserId {
-        return this.userId;
-    }
-    getNickname(): string {
-        return this.nickname;
-    }
-    getPassword(): UserPassword {
-        return this.password;
+        return encode(password) === this.password;
     }
 }

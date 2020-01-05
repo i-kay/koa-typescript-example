@@ -3,7 +3,7 @@ import { Spec } from 'koa-joi-router';
 import { UserService } from '../../applications/user/user.service';
 import {
     validatePassword,
-    validateNickname,
+    validateEmail,
 } from '../../applications/user/user.validators.joi';
 
 const router: Spec = {
@@ -18,15 +18,18 @@ const router: Spec = {
     },
     validate: {
         body: {
-            nickname: validateNickname(),
+            email: validateEmail(),
             password: validatePassword(),
         },
         type: 'json',
     },
     handler: async ctx => {
-        const { nickname, password } = ctx.request.body;
+        const { email, password } = ctx.request.body;
 
-        const authToken = new UserService().issueAuthToken(nickname, password);
+        const authToken = await new UserService().issueAuthToken(
+            email,
+            password,
+        );
         ctx.response.status = 201;
         ctx.response.body = {
             authToken,

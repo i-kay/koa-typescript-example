@@ -1,33 +1,15 @@
-export type WinningType = 'BONUS' | 'WIN' | 'NOT_WIN';
+import { StateOfNumber } from './lotto.types';
 
+interface Cntr {
+    number: number;
+    state?: StateOfNumber;
+}
 export class LottoNumber {
-    private number: number;
-    private winningType: WinningType;
+    number: number;
+    state: StateOfNumber;
 
-    constructor({
-        number,
-        winningType,
-    }: {
-        number: number;
-        winningType?: WinningType;
-    }) {
+    constructor({ number, state }: Cntr) {
         this.number = number;
-        this.winningType = winningType || 'NOT_WIN';
-    }
-
-    calculateWinningType(gameNumbers: number[], bonus: number): void {
-        if (gameNumbers.includes(this.number)) {
-            this.winningType = 'WIN';
-        } else if (bonus === this.number) {
-            this.winningType = 'BONUS';
-        }
-    }
-
-    getNumber(): number {
-        return this.number;
-    }
-
-    getWinningType(): WinningType {
-        return this.winningType;
+        this.state = state || 'BEFORE';
     }
 }

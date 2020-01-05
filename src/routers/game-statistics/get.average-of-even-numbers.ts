@@ -4,19 +4,19 @@ import { GameStatisticsService } from '../../applications/game-statistics/game-s
 
 const router: Spec = {
     method: 'get',
-    path: '/',
+    path: '/average-of-even-numbers',
     meta: {
         swagger: {
-            summary: '당첨된 로또 게임 통계를 조회.',
+            summary: '각 회차에서 짝수의 개수의 평균 조회',
             description: '',
             tags: ['game statistics'],
         },
     },
     validate: {},
     handler: async ctx => {
-        const average = await new GameStatisticsService().getGameStatistics();
+        const evenNumbersAverage = await new GameStatisticsService().getAverageOfEvenNumbers();
         ctx.status = 200;
-        ctx.body = average;
+        ctx.body = { evenNumbersAverage };
     },
 };
 
