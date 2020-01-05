@@ -14,6 +14,7 @@ import {
     PurchasedLottos,
     LottoViewPurchaseService,
 } from '../../domains/lotto/services/lotto.view-purchase.service';
+import { PurchaseId } from '../../domains/lotto/lotto.types';
 
 interface GetLottosByUserId {
     userId: UserId;
@@ -39,18 +40,42 @@ export class LottoService {
         };
     }
 
-    async createLotto(userId: UserId, gameId: GameId, numbers: number[]) {
+    async createLotto(
+        purchaseId: PurchaseId,
+        userId: UserId,
+        gameId: GameId,
+        lottoNumbersList: number[][],
+    ) {
         const dbConn = await getConn();
         const user: User = await new UserRepository(dbConn).findById(userId);
-        dbConn.end();
+
         if (!user) {
-            // 에러 메시지 정의 해야함
+            dbConn.end();
+            // TODO: 에러 메시지 정의 해야함
             // 등록된 User가 아니면 예외처리
             throw notFound();
         }
-        // const lottoId = this.lottoRepository.nextLottoId();
-        const lottoNumbers: LottoNumber[] = numbers.map(number => {
-            return new LottoNumber({ number });
+
+        let lottos: Lotto[] = [];
+
+        lottoNumbersList.forEach((lottoNumbers, idx) => {
+            const lotto: Lotto = new Lotto({
+                purchaseId,
+                gameId,
+                userId,
+                order: idx + 1,
+                lottoNumbers: [
+                    new LottoNumber({ number: lottoNumbers[0] }),
+                    new LottoNumber({ number: lottoNumbers[1] }),
+                    new LottoNumber({ number: lottoNumbers[2] }),
+                    new LottoNumber({ number: lottoNumbers[3] }),
+                    new LottoNumber({ number: lottoNumbers[4] }),
+                    new LottoNumber({ number: lottoNumbers[5] }),
+                ],
+            });
+            lottos.push(lotto);
         });
+
+        dbConn.end();
     }
 }

@@ -8,7 +8,7 @@ export const validatePurchaseId = () =>
         .required()
         .description('purchaseId');
 
-export const validateLottoNumbers = () =>
+export const validateLottoNumbersList = () =>
     Joi.array()
         .items(
             Joi.array()

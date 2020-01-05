@@ -3,6 +3,7 @@ import { UserId } from '../user/user.types';
 import { Datetime } from '../common-types/datetime.type';
 import { LottoId, PurchaseId } from './lotto.types';
 import { GameId } from '../game/game.types';
+import { now } from '../../libs/datetime-handler';
 
 interface Cntr {
     id?: LottoId;
@@ -10,10 +11,10 @@ interface Cntr {
     gameId: GameId;
     userId: UserId;
     order: number; // 용지 내 순서. 1~5
-    winningAmount: number;
+    winningAmount?: number;
     lottoNumbers: LottoNumber[];
-    createdAt: Datetime;
-    deletedAt: Datetime;
+    createdAt?: Datetime;
+    deletedAt?: Datetime;
 }
 
 export class Lotto {
@@ -33,9 +34,9 @@ export class Lotto {
         this.gameId = lotto.gameId;
         this.userId = lotto.userId;
         this.order = lotto.order;
-        this.winningAmount = lotto.winningAmount;
+        this.winningAmount = lotto.winningAmount || 0;
         this.lottoNumbers = lotto.lottoNumbers;
-        this.createdAt = lotto.createdAt;
+        this.createdAt = lotto.createdAt || now();
         this.deletedAt = lotto.deletedAt;
     }
 }

@@ -5,7 +5,7 @@ import { validateUserId } from '../../applications/user/user.validators.joi';
 import { validateGameId } from '../../applications/game/game.validators.joi';
 import {
     validatePurchaseId,
-    validateLottoNumbers,
+    validateLottoNumbersList,
 } from '../../applications/lotto/lotto.validators.joi';
 
 type LottoNumbers = Array<[Array<number>]>;
@@ -25,7 +25,7 @@ const router: Spec = {
             purchaseId: validatePurchaseId(),
             userId: validateUserId(),
             gameId: validateGameId(),
-            LottoNumbers: validateLottoNumbers(),
+            LottoNumbersList: validateLottoNumbersList(),
         },
         type: 'json',
     },
@@ -35,11 +35,15 @@ const router: Spec = {
                 purchaseId,
                 gameId,
                 userId,
-                LottoNumbers,
+                LottoNumbersList,
             } = ctx.request.body;
 
-            // TODO: implements
-            // await new LottoService().createLotto(userId, gameId, numbers);
+            await new LottoService().createLotto(
+                purchaseId,
+                userId,
+                gameId,
+                LottoNumbersList,
+            );
 
             ctx.status = 201;
             ctx.body = {};
