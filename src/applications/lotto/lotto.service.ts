@@ -26,6 +26,7 @@ export class LottoService {
     async getLottosByUserId(userId: UserId): Promise<GetLottosByUserId> {
         const dbConn = await getConn();
         const lottos = await new LottoRepository(dbConn).findByUserId(userId);
+        dbConn.end();
         if (lottos.length === 0) {
             throw notFound();
         }
