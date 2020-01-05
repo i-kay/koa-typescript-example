@@ -76,6 +76,9 @@ export class LottoService {
             lottos.push(lotto);
         });
 
+        // 생성된 lotto의 id
+        const lottoIdList = await new LottoRepository(dbConn).save(lottos);
+
         dbConn.end();
     }
 }
